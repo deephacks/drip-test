@@ -17,13 +17,6 @@ import jnr.unixsocket.UnixSocketChannel;
 
 public class UnixClient {
 
-  public static void main(String[] args) throws IOException {
-
-    UnixClient client = new UnixClient(new File("/tmp/serv.sock"));
-    String response = client.write("request");
-    System.out.println(response);
-  }
-
   private Selector selector;
   private File file;
 
@@ -43,6 +36,12 @@ public class UnixClient {
     }
     this.file = file;
     this.selector = NativeSelectorProvider.getInstance().openSelector();
+  }
+
+  public static void main(String[] args) throws IOException {
+    UnixClient client = new UnixClient(new File("/tmp/serv.sock"));
+    String response = client.write(args[0]);
+    System.out.println(response);
   }
 
   public String write(String cmd) throws IOException {

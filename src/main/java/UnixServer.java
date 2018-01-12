@@ -14,11 +14,6 @@ import jnr.unixsocket.UnixSocketChannel;
 
 public class UnixServer implements AutoCloseable {
 
-  public static void main(String[] args) throws IOException {
-    UnixServer server = new UnixServer(new File("/tmp/serv.sock"));
-    server.start();
-  }
-
   private File file;
   private Thread thread;
   private Selector selector;
@@ -29,6 +24,11 @@ public class UnixServer implements AutoCloseable {
     this.file.deleteOnExit();
     this.selector = NativeSelectorProvider.getInstance().openSelector();
     this.channel = UnixServerSocketChannel.open();
+  }
+
+  public static void main(String[] args) throws IOException {
+    UnixServer server = new UnixServer(new File("/tmp/serv.sock"));
+    server.start();
   }
 
   public void start() throws IOException {

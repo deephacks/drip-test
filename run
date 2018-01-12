@@ -1,16 +1,26 @@
 #!/bin/bash
 
+# 1) start server
+# ./run drip server
+
+# 2) run drip client
+# for i in {1..5}; do time ./run drip msg; done
+
+# 3) run java client
+# for i in {1..5}; do time ./run java msg; done
+
+
 SH_PATH="$( cd "$(dirname "$0")" ; pwd -P )"
 CP_FILE="$SH_PATH/target/classpath.txt"
 
 if [ ! -f $CP_FILE ]; then
-    mvn clean install
-    mvn -f $SH_PATH/pom.xml dependency:build-classpath -DincludeScope=test -Dmdep.outputFile=$CP_FILE
+  mvn clean install
+  mvn -f $SH_PATH/pom.xml dependency:build-classpath -DincludeScope=test -Dmdep.outputFile=$CP_FILE
 fi
 
 CP=$(cat $CP_FILE):$SH_PATH/target/drip-0.jar
 
-if [ "$1" == "server" ]; then
+if [ "$2" == "server" ]; then
   $1 -cp $CP UnixServer
   exit 1
 fi
