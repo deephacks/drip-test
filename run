@@ -1,0 +1,19 @@
+#!/bin/bash
+
+SH_PATH="$( cd "$(dirname "$0")" ; pwd -P )"
+CP_FILE="$SH_PATH/target/classpath.txt"
+
+if [ ! -f $CP_FILE ]; then
+    mvn clean install
+    mvn -f $SH_PATH/pom.xml dependency:build-classpath -DincludeScope=test -Dmdep.outputFile=$CP_FILE
+fi
+
+CP=$(cat $CP_FILE):$SH_PATH/target/drip-0.jar
+
+if [ "$1" == "server" ]; then
+  $1 -cp $CP UnixServer
+  exit 1
+fi
+
+$1 -cp $CP UnixClient $2
+
